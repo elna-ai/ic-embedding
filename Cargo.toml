@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/ic-embedding-backend"
+]
+resolver = "2"

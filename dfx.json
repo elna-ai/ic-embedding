@@ -1,0 +1,24 @@
+{
+  "canisters": {
+    "ic-embedding-backend": {
+      "metadata": [
+          {
+            "name": "candid:service"
+          }
+        ],
+      "candid": "src/ic-embedding-backend/ic-embedding-backend.did",
+      "package": "ic-embedding-backend",
+      "type": "custom",
+      "wasm": "target/wasm32-wasi/release/ic_embedding_backend.wasm",
+      "build": [ "bash scripts/build.sh" ]
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

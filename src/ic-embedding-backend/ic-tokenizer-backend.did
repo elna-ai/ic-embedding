@@ -1,0 +1,4 @@
+service : {
+    "greet": (text) -> (text) query;
+    "tokenize": (text) ->(vec int64,vec int64)
+}
