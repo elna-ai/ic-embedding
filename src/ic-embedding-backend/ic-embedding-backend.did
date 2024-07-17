@@ -1,0 +1,3 @@
+service : {
+    "get_embeddings": (text) ->(vec vec float32)
+}
