@@ -14,7 +14,7 @@ thread_local! {
         RefCell::new(MemoryManager::init(DefaultMemoryImpl::default()));
 }
 
-#[ic_cdk::query]
+#[ic_cdk::update]
 fn get_embeddings(text: String) -> Vec<Vec<f32>> {
     let embeddings = onnx::inference(&text).unwrap();
     let vec_of_vecs: Vec<Vec<f32>> = embeddings.outer_iter().map(|row| row.to_vec()).collect();
@@ -38,4 +38,8 @@ fn post_upgrade() {
     onnx::setup_vocab().unwrap();
 }
 
+// #[ic_cdk::update]
+// fn test() {
+//     println!("hello");
+// }
 // ic_cdk::export_candid!();
