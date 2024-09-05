@@ -2,7 +2,7 @@ from optimum.onnxruntime import ORTModelForFeatureExtraction
 from transformers import AutoTokenizer
 from pathlib import Path
 
-SAVE_PATH = Path("onnx")
+SAVE_PATH = Path("src/ic-embedding-backend/assets/onnx")
 
 model_id = "sentence-transformers/all-MiniLM-L6-v2"
 
