@@ -1,3 +1,5 @@
 onnxruntime==1.14.1
-numpy
 tokenizers==0.13.2
+transformers==4.37.2
+optimum==1.17.1
+huggingface-hub==0.23.4
