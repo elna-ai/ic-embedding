@@ -14,6 +14,7 @@ thread_local! {
         RefCell::new(MemoryManager::init(DefaultMemoryImpl::default()));
 }
 
+#[target_feature(enable = "simd128")]
 #[ic_cdk::update]
 fn get_embeddings(text: String) -> Vec<Vec<f32>> {
     let embeddings = onnx::inference(&text).unwrap();

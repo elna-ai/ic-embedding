@@ -51,7 +51,20 @@ fn normalize(v: &Array) -> Array {
     normalized
 }
 
+fn fmt(n: u64) -> String {
+    n.to_string()
+        .as_bytes()
+        .rchunks(3)
+        .rev()
+        .map(std::str::from_utf8)
+        .collect::<Result<Vec<&str>, _>>()
+        .unwrap()
+        .join("_")
+}
+
 fn get_tokens(sentence: &str) -> Result<(Vec<i64>, Vec<i32>, Vec<i8>), ()> {
+    let instructions_before = ic_cdk::api::instruction_counter();
+
     let lowercase: bool = true;
     let strip_accents: bool = true;
     VOCAB.with_borrow(|vocab| {
@@ -81,12 +94,20 @@ fn get_tokens(sentence: &str) -> Result<(Vec<i64>, Vec<i32>, Vec<i8>), ()> {
         let segment_ids = tokens.segment_ids;
         let token_type_ids = pad_vector(segment_ids, TARGET_LEN);
 
+        let instructions = ic_cdk::api::instruction_counter() - instructions_before;
+
+        ic_cdk::println!(
+            "Tokenization:     {:>12} Wasm instructions",
+            fmt(instructions)
+        );
+
         Ok((input_ids, attention_mask, token_type_ids))
     })
 }
 
 pub fn inference(sentence: &str) -> Result<Array, ()> {
     let (input_ids, attention_mask, token_type_ids) = get_tokens(sentence).unwrap();
+    let instructions_before = ic_cdk::api::instruction_counter();
 
     MODEL.with_borrow(|model| {
         let model = model.as_ref().unwrap();
@@ -151,6 +172,10 @@ pub fn inference(sentence: &str) -> Result<Array, ()> {
         let mean_pooled = &sum_weighted / &sum_mask.mapv(|x| x.max(1e-9));
 
         let embeddings = normalize(&mean_pooled);
+
+        let instructions = ic_cdk::api::instruction_counter() - instructions_before;
+
+        ic_cdk::println!("Inference:     {:>12} Wasm instructions", fmt(instructions));
 
         Ok(embeddings)
     })
