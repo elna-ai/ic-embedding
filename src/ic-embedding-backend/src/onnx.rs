@@ -1,3 +1,4 @@
+use bytes::Bytes;
 use ndarray::Axis;
 use prost::Message;
 use rust_tokenizers::tokenizer::{BertTokenizer, Tokenizer, TruncationStrategy};
@@ -13,12 +14,10 @@ thread_local! {
     static VOCAB: RefCell<Option<BertVocab>>=RefCell::new(None);
 }
 
-const VOCAB_BYTES: &'static [u8] = include_bytes!("../assets/onnx/vocab.txt");
-const MODEL_BYTES: &'static [u8] = include_bytes!("../assets/onnx/model.onnx");
 const TARGET_LEN: usize = 256;
 
-pub fn setup_model() -> TractResult<()> {
-    let bytes = bytes::Bytes::from_static(MODEL_BYTES);
+pub fn setup_model(bytes: Bytes) -> TractResult<()> {
+    // let bytes = bytes::Bytes::from_static(MODEL_BYTES);
     let proto: tract_onnx::pb::ModelProto = tract_onnx::pb::ModelProto::decode(bytes)?;
     let model = tract_onnx::onnx()
         .model_for_proto_model(&proto)?
@@ -30,8 +29,8 @@ pub fn setup_model() -> TractResult<()> {
     Ok(())
 }
 
-pub fn setup_vocab() -> Result<(), ()> {
-    let vocab = BertVocab::from_bytes(VOCAB_BYTES).unwrap();
+pub fn setup_vocab(bytes: Bytes) -> Result<(), ()> {
+    let vocab = BertVocab::from_bytes(&bytes.to_vec()).unwrap();
     VOCAB.with_borrow_mut(|m| {
         *m = Some(vocab);
     });

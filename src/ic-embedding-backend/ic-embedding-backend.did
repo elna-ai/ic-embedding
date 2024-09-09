@@ -1,3 +1,9 @@
-service : {
-    "get_embeddings": (text) ->(vec vec float32);
+type Result = variant { Ok; Err : text };
+service : () -> {
+  append_model_bytes : (blob) -> ();
+  append_vocab_bytes : (blob) -> ();
+  clear_model_bytes : () -> ();
+  clear_vocab_bytes : () -> ();
+  get_embeddings : (text) -> (vec vec float32);
+  setup : () -> (Result);
 }
