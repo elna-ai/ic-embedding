@@ -520,7 +520,6 @@ dependencies = [
  "ndarray",
  "prost",
  "rust_tokenizers",
- "serde",
  "tract-onnx",
 ]
 
