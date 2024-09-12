@@ -22,11 +22,11 @@ thread_local! {
 
 #[target_feature(enable = "simd128")]
 #[ic_cdk::update]
-fn get_embeddings(text: String) -> Vec<Vec<f32>> {
+fn get_embeddings(text: String) -> Vec<f32> {
     let embeddings = onnx::inference(&text).unwrap();
-    let vec_of_vecs: Vec<Vec<f32>> = embeddings.outer_iter().map(|row| row.to_vec()).collect();
+    let flattened_vec: Vec<f32> = embeddings.iter().cloned().collect();
 
-    vec_of_vecs
+    flattened_vec
 }
 
 #[ic_cdk::init]

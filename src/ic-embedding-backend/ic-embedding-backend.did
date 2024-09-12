@@ -4,6 +4,6 @@ service : () -> {
   append_vocab_bytes : (blob) -> ();
   clear_model_bytes : () -> ();
   clear_vocab_bytes : () -> ();
-  get_embeddings : (text) -> (vec vec float32);
+  get_embeddings : (text) -> (vec float32);
   setup : () -> (Result);
 }
