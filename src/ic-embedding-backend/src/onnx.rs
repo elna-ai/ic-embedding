@@ -14,7 +14,7 @@ thread_local! {
     static VOCAB: RefCell<Option<BertVocab>>=RefCell::new(None);
 }
 
-const TARGET_LEN: usize = 256;
+const TARGET_LEN: usize = 512;
 
 pub fn setup_model(bytes: Bytes) -> TractResult<()> {
     // let bytes = bytes::Bytes::from_static(MODEL_BYTES);
@@ -75,7 +75,7 @@ fn get_tokens(sentence: &str) -> Result<(Vec<i64>, Vec<i32>, Vec<i8>), ()> {
             sentence,
             None,
             TARGET_LEN,
-            &TruncationStrategy::DoNotTruncate,
+            &TruncationStrategy::LongestFirst,
             0,
         );
 
